@@ -1,27 +1,55 @@
-I=imread('orca.jpg');
-figure 
+%IMPORTANT VARIABLES
+numberBlocksY = 100;
+numberBlocksX = 100;
+fileName = 'Eagle1.png';
+trainingModel = 'Bay'; % Tree | Knn | Bay
+
+%MAIN CODE
+I=imread(fileName);
 imshow(I,[]);
 % [xmin ymin width height]
 rectangleContenidor=getrect();
+resultImage = I;
 
-%T=colfilt(I,[5 5],'distinct',@features)
 [nr,nc]= size(I(:,:,1));
-windowSizeX=nr/100;
-windowSizeY=nc/100;
-matrix=zeros([nr/windowSizeX nc/windowSizeY 3]);
-for i=1:windowSizeX:nr
-    for j=1:windowSizeY:nc
-        B=I(i:i+windowSizeX-1,j:j+windowSizeY-1,:);
-        colourMean = blockMean(B);
-        fprintf('Color: %d\n', colourMean);
-        if i~=1 && j~=1
-            matrix(floor(i/windowSizeX),floor(j/windowSizeY),1)=colourMean(1,1);
-            matrix(floor(i/windowSizeX),floor(j/windowSizeY),2)=colourMean(1,2);
-            matrix(floor(i/windowSizeX),floor(j/windowSizeY),3)=colourMean(1,3);
+windowSizeY = floor(nr/numberBlocksY);
+windowSizeX = floor(nc/numberBlocksX);
+stuffY = windowSizeY - mod(nr,windowSizeY);
+stuffX = windowSizeX - mod(nc,windowSizeX);
+I = padarray(I, [stuffY stuffX], 'replicate','post');
+[nr,nc]= size(I(:,:,1));
+
+numberBlocks = nr/windowSizeY * nc/windowSizeX;
+trainingDataset = zeros([numberBlocks 7]);
+charBackground = 'B';
+charObject = 'O';
+prediction = charBackground;
+
+cont = 0;
+for i=1:windowSizeY:nr
+    for j=1:windowSizeX:nc
+        
+        cont = cont + 1;
+        B = I(i:i+windowSizeY-1,j:j+windowSizeX-1,:);
+
+        featureVector=computeFeatures(B);
+        trainingDataset(cont,:)=featureVector;
+
+        if blockInsideRectangle([j i windowSizeX windowSizeY],rectangleContenidor,0.8)
+            prediction = [prediction; charObject];
+        else
+            prediction = [prediction; charBackground];
         end
-        %matrix(mod(i,windowSizeX),mod(j,windowSizeY),1)=colourMean(1,1);
-        %matrix(mod(i,windowSizeX),mod(j,windowSizeY),2)=colourMean(1,2);
-        %matrix(mod(i,windowSizeX),mod(j,windowSizeY),3)=colourMean(1,3);
     end
 end
-imshow(uint8(matrix),[]);
+prediction = prediction(2:(numberBlocks+1));
+
+%Train model to differentiate between the two type of blocks
+trainedModel = trainModel(trainingDataset,prediction,trainingModel);
+
+%Predict model for the blocks inside the rectangle
+predictedPixels = predictModel(I,trainedModel,rectangleContenidor,windowSizeX,windowSizeY,trainingModel);
+
+imshow(predictedPixels,[]);
+imshow(I,[]);
+
