@@ -4,7 +4,7 @@ function predictedPoints = predictPoints(I,expandedEdges,trainedModel,type)
     for i=1:nr
         for j=1:nc
             if expandedEdges(i,j) == 1
-                B = I(i-1:i+1,j-1:j+1,:);
+                B = I(i-2:i+2,j-2:j+2,:);
                 featureVector = computeFeatures(B);
                 [test_prediction,score] = predict(trainedModel,featureVector);
                 switch type

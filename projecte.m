@@ -1,7 +1,7 @@
 %IMPORTANT VARIABLES
 numberBlocksY = 100;
 numberBlocksX = 100;
-fileName = 'Snow1.png';
+fileName = 'Eagle1.png';
 trainingModel = 'Bay'; % Tree | Knn | Bay
 
 %MAIN CODE
