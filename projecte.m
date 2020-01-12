@@ -98,6 +98,6 @@ for i=1:13
     h2.FaceColor=[0 0.4470 0.7410];
     h2.Normalization = 'probability';
     %h2.BinWidth = h1.BinWidth;
-    h1.BinWidth = h2.BinWidth;
+    %h1.BinWidth = h2.BinWidth;
 end
 
