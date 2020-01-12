@@ -1,13 +1,12 @@
 %IMPORTANT VARIABLES
 numberBlocksY = 100;
 numberBlocksX = 100;
-fileType = '.png';
-fileNameFirstImage = 'Eagle1';
-fileNameSecondImage = 'Eagle2';
+fileNameFirstImage = 'Eagle1.png';
+fileNameSecondImage = 'Eagle2.png';
 trainingModel = 'Bay'; % Tree | Knn | Bay
 
 %MAIN CODE
-I = imread(['images/' fileNameFirstImage fileType]);
+I=imread(['images/' fileNameFirstImage]);
 imshow(I,[]);
 % [xmin ymin width height]
 rectangleContenidor=getrect();
@@ -64,18 +63,10 @@ aux = or(predictedPoints,interior);
 aux = deleteInteriorHoles(aux);
 imshow(aux,[]);
 
-[finalImage, objectImage] = doFinalImage(I,aux);
+finalImage = doFinalImage(I,aux);
 imshow(finalImage,[]);
-imwrite(objectImage,['output_images/' fileNameFirstImage '.pgm']);
-aux = imread(['images/' fileNameSecondImage fileType]);
-imwrite(aux,['output_images/' fileNameSecondImage '.pgm']);
-match([fileNameFirstImage '.pgm'],[fileNameSecondImage '.pgm']);
-
-[image, descrips, locs] = sift([fileNameFirstImage '.pgm']);
-showkeys(image, locs);
-
-[image, descrips, locs] = sift([fileNameSecondImage '.pgm']);
-showkeys(image, locs);
+imwrite(finalImage,['output_images/' fileNameFirstImage]);
+match('scene.pgm','book.pgm');
 
 
 
