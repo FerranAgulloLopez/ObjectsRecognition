@@ -1,0 +1,87 @@
+%IMPORTANT VARIABLES
+numberBlocksY = 100;
+numberBlocksX = 100;
+fileName = 'Eagle1.png';
+trainingModel = 'Bay'; % Tree | Knn | Bay
+
+%MAIN CODE
+I=imread(['images/' fileName]);
+imshow(I,[]);
+% [xmin ymin width height]
+rectangleContenidor=getrect();
+resultImage = I;
+
+[nr,nc]= size(I(:,:,1));
+windowSizeY = floor(nr/numberBlocksY);
+windowSizeX = floor(nc/numberBlocksX);
+stuffY = windowSizeY - mod(nr,windowSizeY);
+stuffX = windowSizeX - mod(nc,windowSizeX);
+I = padarray(I, [stuffY stuffX], 'replicate','post');
+[nr,nc]= size(I(:,:,1));
+
+numberBlocks = nr/windowSizeY * nc/windowSizeX;
+trainingDataset = zeros([numberBlocks 13]);
+charBackground = 'B';
+charObject = 'O';
+prediction = charBackground;
+
+%HISTOGRAMA
+bset = zeros([1 13]);
+
+cont = 0;
+for i=1:windowSizeY:nr
+    for j=1:windowSizeX:nc
+        
+        cont = cont + 1;
+        B = I(i:i+windowSizeY-1,j:j+windowSizeX-1,:);
+
+        featureVector=computeFeatures(B);
+        trainingDataset(cont,:)=featureVector;
+
+        if blockInsideRectangle([j i windowSizeX windowSizeY],rectangleContenidor,0.8)
+            prediction = [prediction; charObject];
+        else
+            bset = [bset;featureVector];
+            prediction = [prediction; charBackground];
+        end
+    end
+end
+prediction = prediction(2:(numberBlocks+1));
+
+%Train model to differentiate between the two type of blocks
+trainedModel = trainModel(trainingDataset,prediction,trainingModel);
+
+%Predict model for the blocks inside the rectangle
+[oset,bsetaux,predictedBlocks] = predictModel(I,trainedModel,rectangleContenidor,windowSizeX,windowSizeY,trainingModel);
+
+firstCleaning = predictedBlocks == 1;
+firstCleaning = deleteInteriorHoles(firstCleaning);
+firstCleaning = deleteLittleRegions(firstCleaning,windowSizeY,windowSizeX);
+
+[expandedEdges,interior] = expandEdges(firstCleaning,windowSizeY,windowSizeX);
+
+predictedPoints = predictPoints(I,expandedEdges,trainedModel,trainingModel);
+
+aux = or(predictedPoints,interior);
+aux = deleteInteriorHoles(aux);
+imshow(aux,[]);
+
+finalImage = doFinalImage(I,aux);
+imshow(finalImage,[]);
+
+%HISTOGRAMAS
+bset = [bset;bsetaux];
+for i=1:1
+    h1 = histogram(bset(:,i));
+    figure
+    h2 = histogram(oset();
+end
+
+h1 = histogram(bset(:,1));
+figure
+h2 = histogram(oset);
+
+h1.Normalization = 'probability';
+h1.BinWidth = 0.25;
+h2.Normalization = 'probability';
+h2.BinWidth = 0.25;
