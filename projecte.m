@@ -20,7 +20,7 @@ I = padarray(I, [stuffY stuffX], 'replicate','post');
 [nr,nc]= size(I(:,:,1));
 
 numberBlocks = nr/windowSizeY * nc/windowSizeX;
-trainingDataset = zeros([numberBlocks 9]);
+trainingDataset = zeros([numberBlocks 13]);
 charBackground = 'B';
 charObject = 'O';
 prediction = charBackground;
