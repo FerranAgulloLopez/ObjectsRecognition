@@ -1,11 +1,11 @@
 %IMPORTANT VARIABLES
 numberBlocksY = 100;
 numberBlocksX = 100;
-fileName = 'Eagle1.png';
+fileName = 'Snow1.png';
 trainingModel = 'Bay'; % Tree | Knn | Bay
 
 %MAIN CODE
-I=imread(fileName);
+I=imread(['images/' fileName]);
 imshow(I,[]);
 % [xmin ymin width height]
 rectangleContenidor=getrect();
@@ -48,8 +48,23 @@ prediction = prediction(2:(numberBlocks+1));
 trainedModel = trainModel(trainingDataset,prediction,trainingModel);
 
 %Predict model for the blocks inside the rectangle
-predictedPixels = predictModel(I,trainedModel,rectangleContenidor,windowSizeX,windowSizeY,trainingModel);
+predictedBlocks = predictModel(I,trainedModel,rectangleContenidor,windowSizeX,windowSizeY,trainingModel);
 
-imshow(predictedPixels,[]);
-imshow(I,[]);
+firstCleaning = predictedBlocks == 1;
+firstCleaning = deleteInteriorHoles(firstCleaning);
+firstCleaning = deleteLittleRegions(firstCleaning,windowSizeY,windowSizeX);
+
+[expandedEdges,interior] = expandEdges(firstCleaning,windowSizeY,windowSizeX);
+
+predictedPoints = predictPoints(I,expandedEdges,trainedModel,trainingModel);
+
+aux = or(predictedPoints,interior);
+aux = deleteInteriorHoles(aux);
+imshow(aux,[]);
+
+finalImage = doFinalImage(I,aux);
+imshow(finalImage,[]);
+
+
+
 
