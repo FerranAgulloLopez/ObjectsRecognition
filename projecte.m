@@ -48,11 +48,13 @@ for i=1:windowSizeY:nr
 end
 prediction = prediction(2:(numberBlocks+1));
 
+
+[normalizeValues,normalizedTrainingDataset] = normalizeColumns(trainingDataset);
 %Train model to differentiate between the two type of blocks
-trainedModel = trainModel(trainingDataset,prediction,trainingModel);
+trainedModel = trainModel(normalizedTrainingDataset,prediction,trainingModel);
 
 %Predict model for the blocks inside the rectangle
-[oset,bsetaux,predictedBlocks] = predictModel(I,trainedModel,rectangleContenidor,windowSizeX,windowSizeY,trainingModel);
+[oset,bsetaux,predictedBlocks] = predictModel(I,trainedModel,rectangleContenidor,windowSizeX,windowSizeY,trainingModel,normalizeValues);
 
 firstCleaning = predictedBlocks == 1;
 firstCleaning = deleteInteriorHoles(firstCleaning);
@@ -80,7 +82,7 @@ for i=1:13
     h2 = histogram(oset(:,i));
     h2.FaceColor=[0 0.4470 0.7410];
     h2.Normalization = 'probability';
-    h2.BinWidth = h1.BinWidth;
-    %h1.BinWidth = h2.BinWidth;
+    %h2.BinWidth = h1.BinWidth;
+    h1.BinWidth = h2.BinWidth;
 end
 
