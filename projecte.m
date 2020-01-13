@@ -3,7 +3,7 @@ numberBlocksY = 100;
 numberBlocksX = 100;
 fileType = '.png';
 fileNameFirstImage = 'Eagle1';
-fileNameSecondImage = 'Eagle2';
+fileNameSecondImage = 'Eagle2_occlusion';
 trainingModel = 'Bay'; % Tree | Knn | Bay
 
 %MAIN CODE
@@ -69,13 +69,8 @@ imshow(finalImage,[]);
 imwrite(objectImage,['output_images/' fileNameFirstImage '.pgm']);
 aux = imread(['images/' fileNameSecondImage fileType]);
 imwrite(aux,['output_images/' fileNameSecondImage '.pgm']);
-match([fileNameFirstImage '.pgm'],[fileNameSecondImage '.pgm']);
 
-[image, descrips, locs] = sift([fileNameFirstImage '.pgm']);
-showkeys(image, locs);
-
-[image, descrips, locs] = sift([fileNameSecondImage '.pgm']);
-showkeys(image, locs);
+doSecondStep(imread(['images/' fileNameSecondImage fileType]),imread(['output_images/' fileNameFirstImage '.pgm']),imread(['output_images/' fileNameSecondImage '.pgm']));
 
 
 
