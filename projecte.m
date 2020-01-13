@@ -27,6 +27,9 @@ charBackground = 'B';
 charObject = 'O';
 prediction = charBackground;
 
+%HISTOGRAMA
+bset = zeros([1 13]);
+
 cont = 0;
 for i=1:windowSizeY:nr
     for j=1:windowSizeX:nc
@@ -40,17 +43,20 @@ for i=1:windowSizeY:nr
         if blockInsideRectangle([j i windowSizeX windowSizeY],rectangleContenidor,0.8)
             prediction = [prediction; charObject];
         else
+            bset = [bset;featureVector];
             prediction = [prediction; charBackground];
         end
     end
 end
 prediction = prediction(2:(numberBlocks+1));
 
+
+[normalizeValues,normalizedTrainingDataset] = normalizeColumns(trainingDataset);
 %Train model to differentiate between the two type of blocks
-trainedModel = trainModel(trainingDataset,prediction,trainingModel);
+trainedModel = trainModel(normalizedTrainingDataset,prediction,trainingModel);
 
 %Predict model for the blocks inside the rectangle
-predictedBlocks = predictModel(I,trainedModel,rectangleContenidor,windowSizeX,windowSizeY,trainingModel);
+[oset,bsetaux,predictedBlocks] = predictModel(I,trainedModel,rectangleContenidor,windowSizeX,windowSizeY,trainingModel,normalizeValues);
 
 firstCleaning = predictedBlocks == 1;
 firstCleaning = deleteInteriorHoles(firstCleaning);
@@ -75,6 +81,18 @@ doSecondStep(imread(['images/' fileNameSecondImage fileType]),imread(['output_im
 
 
 
-
-
+%HISTOGRAMAS
+bset = [bset;bsetaux];
+for i=1:13
+    figure
+    h1 = histogram(bset(:,i));
+    h1.FaceColor=[0.8500 0.3250 0.0980];
+    h1.Normalization = 'probability';
+    hold on
+    h2 = histogram(oset(:,i));
+    h2.FaceColor=[0 0.4470 0.7410];
+    h2.Normalization = 'probability';
+    %h2.BinWidth = h1.BinWidth;
+    %h1.BinWidth = h2.BinWidth;
+end
 

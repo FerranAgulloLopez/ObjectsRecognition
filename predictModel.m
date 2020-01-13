@@ -1,4 +1,6 @@
-function predictedPixels = predictModel(I,trainedModel,rectangleContenidor,windowSizeX,windowSizeY,type)
+function [oset,bset,predictedPixels] = predictModel(I,trainedModel,rectangleContenidor,windowSizeX,windowSizeY,type,normalizeValues)
+    bset = zeros([1 13]);
+    oset = zeros([1 13]);
     predictedPixels = zeros(size(I(:,:,1)));
     ymin = floor(rectangleContenidor(2));
     xmin = floor(rectangleContenidor(1));
@@ -9,7 +11,12 @@ function predictedPixels = predictModel(I,trainedModel,rectangleContenidor,windo
         for j=xmin:windowSizeX:xmin+width
             B = I(i:i+windowSizeY-1,j:j+windowSizeX-1,:);
             featureVector = computeFeatures(B);
-            [test_prediction,score] = predict(trainedModel,featureVector);
+            normalizedfeatureVector = featureVector;
+            for k=1:length(featureVector)
+                value = featureVector(k);
+                normalizedfeatureVector(k) = (value - normalizeValues(k,1))/(normalizeValues(k,2) - normalizeValues(k,1));
+            end
+            [test_prediction,score] = predict(trainedModel,normalizedfeatureVector);
             switch type
                 case 'Tree'
                     predicted = test_prediction{1};
@@ -17,9 +24,14 @@ function predictedPixels = predictModel(I,trainedModel,rectangleContenidor,windo
                     predicted = test_prediction;
             end
             if predicted == 'O'
+                oset = [oset;featureVector];
                 predictedPixels(i:i+windowSizeY-1,j:j+windowSizeX-1,:) = 1;
+            else
+                bset = [bset;featureVector];
             end
         end
     end
+    bset = bset(2:length(bset),:);
+    oset = oset(2:length(oset),:);
 end
 
