@@ -3,7 +3,7 @@ numberBlocksY = 100;
 numberBlocksX = 100;
 fileType = '.png';
 fileNameFirstImage = 'Eagle1';
-fileNameSecondImage = 'Eagle2_occlusion';
+fileNameSecondImage = 'Eagle2';
 trainingModel = 'Bay'; % Tree | Knn | Bay
 
 %MAIN CODE
