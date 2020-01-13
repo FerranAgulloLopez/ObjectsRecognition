@@ -1,24 +1,25 @@
+clear;
 %IMPORTANT VARIABLES
 numberBlocksY = 100;
 numberBlocksX = 100;
-fileType = '.png';
-fileNameFirstImage = 'Eagle1';
-fileNameSecondImage = 'Eagle2';
+fileType = '.jpg';
+fileNameFirstImage = 'cat-in-the-grass-124276';
+fileNameSecondImage = 'cat-jumping-running-grass';
 trainingModel = 'Bay'; % Tree | Bay | Knn | Svm
-secondStepType = 'KeyPoints'; % KeyPoints | Features | FeaturesAndKeyPoints
+secondStepType = 'Features'; % KeyPoints | Features | FeaturesAndKeyPoints
 
 I = imread(['images/' fileNameFirstImage fileType]);
 imshow(I,[]);
 % [xmin ymin width height]
 rectangleContenidor = getrect();
 
-doFirstStep(I,rectangleContenidor,numberBlocksY,numberBlocksX,trainingModel);
+[trainedModel,trainingModel,normalizeValues,objectImage] = doFirstStep(I,rectangleContenidor,numberBlocksY,numberBlocksX,trainingModel);
 
 imwrite(objectImage,'temporary/1.pgm');
 aux = imread(['images/' fileNameSecondImage fileType]);
 imwrite(aux,'temporary/2.pgm');
 
-doSecondStep(imread(['images/' fileNameSecondImage fileType]),imread('temporary/1.pgm'),imread('temporary/2.pgm'),secondStepType);
+doSecondStep(imread(['images/' fileNameSecondImage fileType]),imread('temporary/1.pgm'),imread('temporary/2.pgm'),secondStepType,trainedModel,trainingModel,normalizeValues,numberBlocksY,numberBlocksX);
 
 
 %HISTOGRAMAS

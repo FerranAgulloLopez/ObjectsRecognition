@@ -1,4 +1,4 @@
-function doFirstStep(I,rectangleContenidor,numberBlocksY,numberBlocksX,trainingModel)
+function [trainedModel,trainingModel,normalizeValues,objectImage] = doFirstStep(I,rectangleContenidor,numberBlocksY,numberBlocksX,trainingModel)
     [nr,nc]= size(I(:,:,1));
     windowSizeY = floor(nr/numberBlocksY);
     windowSizeX = floor(nc/numberBlocksX);

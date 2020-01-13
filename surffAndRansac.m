@@ -42,7 +42,7 @@ function [xmin,xmax,ymin,ymax] = surffAndRansac(image1,image2)
         ymax = max(arrayY);
         
         if goodPoint(xmin,ymin,image2) == 1 & goodPoint(xmax,ymax,image2) == 1
-            correct = 1
+            correct = 1;
         end
     end
 end
