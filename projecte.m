@@ -64,7 +64,7 @@ firstCleaning = deleteLittleRegions(firstCleaning,windowSizeY,windowSizeX);
 
 [expandedEdges,interior] = expandEdges(firstCleaning,windowSizeY,windowSizeX);
 
-predictedPoints = predictPoints(I,expandedEdges,trainedModel,trainingModel);
+predictedPoints = predictPoints(I,expandedEdges,trainedModel,trainingModel,normalizeValues);
 
 aux = or(predictedPoints,interior);
 aux = deleteInteriorHoles(aux);
