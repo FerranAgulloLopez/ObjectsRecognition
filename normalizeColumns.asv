@@ -10,9 +10,10 @@ normalizeValues = zeros([17 2]);
         
         for j=1:nr
             value = result_table(j,i);
-            if max_value ~= min_value
+            if max_value != min_value
                 result_table(j,i) = (value - min_value)/(max_value - min_value);
-            end
+            else 
+            end 
         end
     end
 end
