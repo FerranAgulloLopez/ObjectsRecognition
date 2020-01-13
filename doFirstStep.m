@@ -54,9 +54,9 @@ function doFirstStep(I,rectangleContenidor,numberBlocksY,numberBlocksX,trainingM
 
     aux = or(predictedPoints,interior);
     aux = deleteInteriorHoles(aux);
-    imshow(aux,[]);
+    figure;imshow(aux,[]);
 
     [finalImage, objectImage] = doFinalImage(I,aux);
-    imshow(finalImage,[]);
+    figure;imshow(finalImage,[]);
 end
 

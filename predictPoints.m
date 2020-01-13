@@ -5,6 +5,7 @@ function predictedPoints = predictPoints(I,expandedEdges,trainedModel,type,norma
         for j=1:nc
             if expandedEdges(i,j) == 1
                 B = I(i-2:i+2,j-2:j+2,:);
+                expandedEdges(i-2:i+2,j-2:j+2) = 0; % new line
                 featureVector = computeFeatures(B);
                 normalizedfeatureVector = featureVector;
                 for k=1:length(featureVector)
@@ -19,7 +20,8 @@ function predictedPoints = predictPoints(I,expandedEdges,trainedModel,type,norma
                         predicted = test_prediction;
                 end
                 if predicted == 'O'
-                    predictedPoints(i,j,:) = 1;
+                    % predictedPoints(i,j,:) = 1;
+                    predictedPoints(i-2:i+2,j-2:j+2,:) = 1; % new line
                 end
             end
         end

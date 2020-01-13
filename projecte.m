@@ -1,9 +1,9 @@
 %IMPORTANT VARIABLES
 numberBlocksY = 100;
 numberBlocksX = 100;
-fileType = '.jpg';
-fileNameFirstImage = 'cat-in-the-grass-124276';
-fileNameSecondImage = 'cat-jumping-running-grass';
+fileType = '.png';
+fileNameFirstImage = 'Eagle1';
+fileNameSecondImage = 'Eagle2';
 trainingModel = 'Bay'; % Tree | Bay | Knn | Svm
 secondStepType = 'KeyPoints'; % KeyPoints | Features | FeaturesAndKeyPoints
 
