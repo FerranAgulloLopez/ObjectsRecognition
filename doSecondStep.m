@@ -1,4 +1,4 @@
-function I = doSecondStep(I,image1,image2)
+function I = doSecondStep(I,image1,image2,secondStepType)
     original = image2;
     distorted = image1;
     ptsOriginal  = detectSURFFeatures(original);
@@ -32,12 +32,14 @@ function I = doSecondStep(I,image1,image2)
         arrayY(1,k) = Y;
     end
     
-    correctorMin = 0.75;
+    correctorMin = 0.9;
+    correctorMax = 1.1;
     xmin = min(arrayX)*correctorMin;
-    xmax = max(arrayX);
+    xmax = max(arrayX)*correctorMax;
     ymin = min(arrayY)*correctorMin;
-    ymax = max(arrayY);
+    ymax = max(arrayY)*correctorMax;
     
+    %figure;
     imshow(I);
     rectangle('Position',[xmin ymin (xmax-xmin) (ymax-ymin)],'Curvature',0.2,'EdgeColor','r','LineWidth',3)
 end

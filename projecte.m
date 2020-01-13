@@ -2,9 +2,10 @@
 numberBlocksY = 100;
 numberBlocksX = 100;
 fileType = '.png';
-fileNameFirstImage = 'Eagle1';
-fileNameSecondImage = 'Eagle2';
-trainingModel = 'Bay'; % Tree | Knn | Bay
+fileNameFirstImage = 'Pitcher_sequence_1';
+fileNameSecondImage = 'Pitcher_sequence_2';
+trainingModel = 'Tree'; % Tree | Bay
+secondStepType = 'Exhaustive'; % Exhaustive | Simple
 
 %MAIN CODE
 I = imread(['images/' fileNameFirstImage fileType]);
@@ -71,12 +72,12 @@ aux = deleteInteriorHoles(aux);
 imshow(aux,[]);
 
 [finalImage, objectImage] = doFinalImage(I,aux);
-imshow(finalImage,[]);
-imwrite(objectImage,['output_images/' fileNameFirstImage '.pgm']);
+imshow(objectImage,[]);
+imwrite(objectImage,'temporary/1.pgm');
 aux = imread(['images/' fileNameSecondImage fileType]);
-imwrite(aux,['output_images/' fileNameSecondImage '.pgm']);
+imwrite(aux,'temporary/2.pgm');
 
-doSecondStep(imread(['images/' fileNameSecondImage fileType]),imread(['output_images/' fileNameFirstImage '.pgm']),imread(['output_images/' fileNameSecondImage '.pgm']));
+doSecondStep(imread(['images/' fileNameSecondImage fileType]),imread('temporary/1.pgm'),imread('temporary/2.pgm'),secondStepType);
 
 
 
