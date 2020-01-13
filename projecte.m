@@ -4,7 +4,7 @@ numberBlocksX = 100;
 fileType = '.png';
 fileNameFirstImage = 'Eagle1';
 fileNameSecondImage = 'Eagle2';
-trainingModel = 'Bay'; % Tree | Bay
+trainingModel = 'Bay'; % Tree | Bay | Knn | Svm
 secondStepType = 'Exhaustive'; % Exhaustive | Simple
 
 %MAIN CODE

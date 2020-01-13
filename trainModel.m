@@ -1,5 +1,7 @@
 function trainedModel = trainModel(trainingDataset,prediction,type)
     switch type
+        case 'Svm'
+            trainedModel = fitcsvm(trainingDataset,prediction,'CacheSize',500,'Solver','SMO');
         case 'Tree'
             trainedModel = TreeBagger(100,trainingDataset,prediction);
         case 'Knn'
