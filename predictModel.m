@@ -1,6 +1,6 @@
 function [oset,bset,predictedPixels] = predictModel(I,trainedModel,rectangleContenidor,windowSizeX,windowSizeY,type,normalizeValues)
-    bset = zeros([1 13]);
-    oset = zeros([1 13]);
+    bset = zeros([1 17]);
+    oset = zeros([1 17]);
     predictedPixels = zeros(size(I(:,:,1)));
     ymin = floor(rectangleContenidor(2));
     xmin = floor(rectangleContenidor(1));

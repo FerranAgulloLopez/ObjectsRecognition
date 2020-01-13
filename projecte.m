@@ -2,9 +2,9 @@
 numberBlocksY = 100;
 numberBlocksX = 100;
 fileType = '.png';
-fileNameFirstImage = 'Pitcher_sequence_1';
-fileNameSecondImage = 'Pitcher_sequence_2';
-trainingModel = 'Tree'; % Tree | Bay
+fileNameFirstImage = 'Eagle1';
+fileNameSecondImage = 'Eagle2';
+trainingModel = 'Bay'; % Tree | Bay
 secondStepType = 'Exhaustive'; % Exhaustive | Simple
 
 %MAIN CODE
@@ -23,13 +23,13 @@ I = padarray(I, [stuffY stuffX], 'replicate','post');
 [nr,nc]= size(I(:,:,1));
 
 numberBlocks = nr/windowSizeY * nc/windowSizeX;
-trainingDataset = zeros([numberBlocks 13]);
+trainingDataset = zeros([numberBlocks 17]);
 charBackground = 'B';
 charObject = 'O';
 prediction = charBackground;
 
 %HISTOGRAMA
-bset = zeros([1 13]);
+bset = zeros([1 17]);
 
 cont = 0;
 for i=1:windowSizeY:nr
@@ -80,11 +80,9 @@ imwrite(aux,'temporary/2.pgm');
 doSecondStep(imread(['images/' fileNameSecondImage fileType]),imread('temporary/1.pgm'),imread('temporary/2.pgm'),secondStepType);
 
 
-
-
 %HISTOGRAMAS
 bset = [bset;bsetaux];
-for i=1:13
+for i=1:17
     figure
     h1 = histogram(bset(:,i));
     h1.FaceColor=[0.8500 0.3250 0.0980];
@@ -93,7 +91,7 @@ for i=1:13
     h2 = histogram(oset(:,i));
     h2.FaceColor=[0 0.4470 0.7410];
     h2.Normalization = 'probability';
-    %h2.BinWidth = h1.BinWidth;
+    h2.BinWidth = h1.BinWidth;
     %h1.BinWidth = h2.BinWidth;
 end
 

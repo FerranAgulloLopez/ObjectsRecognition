@@ -1,5 +1,5 @@
 function [normalizeValues,result_table] = normalizeColumns(result_table)
-normalizeValues = zeros([13 2]);
+normalizeValues = zeros([17 2]);
 [nr, nc] = size(result_table);
     for i=1:nc
         max_value = max(result_table(:,i));
