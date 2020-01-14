@@ -37,12 +37,12 @@ function [trainedModel,trainingModel,normalizeValues,objectImage,bset,oset,bseta
     prediction = prediction(2:(numberBlocks+1));
 
 
-    [normalizeValues,normalizedTrainingDataset] = normalizeColumns(trainingDataset);
+    [normalizeValues,normalizedTrainingDataset,deleted] = normalizeColumns(trainingDataset);
     %Train model to differentiate between the two type of blocks
     trainedModel = trainModel(normalizedTrainingDataset,prediction,trainingModel);
 
     %Predict model for the blocks inside the rectangle
-    [oset,bsetaux,predictedBlocks] = predictModel(I,trainedModel,rectangleContenidor,windowSizeX,windowSizeY,trainingModel,normalizeValues);
+    [oset,bsetaux,predictedBlocks] = predictModel(I,trainedModel,rectangleContenidor,windowSizeX,windowSizeY,trainingModel,normalizeValues,deleted);
 
     firstCleaning = predictedBlocks == 1;
     firstCleaning = deleteInteriorHoles(firstCleaning);
@@ -50,7 +50,7 @@ function [trainedModel,trainingModel,normalizeValues,objectImage,bset,oset,bseta
 
     [expandedEdges,interior] = expandEdges(firstCleaning,windowSizeY,windowSizeX);
 
-    predictedPoints = predictPoints(I,expandedEdges,trainedModel,trainingModel,normalizeValues,secondAproximationType);
+    predictedPoints = predictPoints(I,expandedEdges,trainedModel,trainingModel,normalizeValues,secondAproximationType,deleted);
 
     aux = or(predictedPoints,interior);
     aux = deleteInteriorHoles(aux);

@@ -1,4 +1,4 @@
-function predictedPoints = predictPoints(I,expandedEdges,trainedModel,type,normalizeValues,difficulty)
+function predictedPoints = predictPoints(I,expandedEdges,trainedModel,type,normalizeValues,difficulty,deleted)
     [nr,nc]= size(I(:,:,1));
     predictedPoints = zeros(size(I(:,:,1)));
     for i=1:nr
@@ -11,8 +11,12 @@ function predictedPoints = predictPoints(I,expandedEdges,trainedModel,type,norma
                     end
                     featureVector = computeFeatures(B);
                     normalizedfeatureVector = featureVector;
-                    for k=1:length(featureVector)
-                        value = featureVector(k);
+                    if length(deleted)>1
+                        auxdeleted=deleted(2:length(deleted));
+                        normalizedfeatureVector(auxdeleted)=[];
+                    end
+                    for k=1:length(normalizedfeatureVector)
+                        value = normalizedfeatureVector(k);
                         normalizedfeatureVector(k) = (value - normalizeValues(k,1))/(normalizeValues(k,2) - normalizeValues(k,1));
                     end
                     [test_prediction,score] = predict(trainedModel,normalizedfeatureVector);

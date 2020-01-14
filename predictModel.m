@@ -1,6 +1,12 @@
-function [oset,bset,predictedPixels] = predictModel(I,trainedModel,rectangleContenidor,windowSizeX,windowSizeY,type,normalizeValues)
-    bset = zeros([1 17]);
-    oset = zeros([1 17]);
+function [oset,bset,predictedPixels] = predictModel(I,trainedModel,rectangleContenidor,windowSizeX,windowSizeY,type,normalizeValues,deleted)
+    cut=false;
+    if length(deleted)>1
+        cut=true;
+        deleted=deleted(2:length(deleted));
+    end    
+    numfeatures=length(normalizeValues);
+    bset = zeros([1 numfeatures]);
+    oset = zeros([1 numfeatures]);
     predictedPixels = zeros(size(I(:,:,1)));
     ymin = floor(rectangleContenidor(2));
     xmin = floor(rectangleContenidor(1));
@@ -12,8 +18,12 @@ function [oset,bset,predictedPixels] = predictModel(I,trainedModel,rectangleCont
             B = I(i:i+windowSizeY-1,j:j+windowSizeX-1,:);
             featureVector = computeFeatures(B);
             normalizedfeatureVector = featureVector;
-            for k=1:length(featureVector)
-                value = featureVector(k);
+            if cut
+                featureVector(deleted)=[];
+                normalizedfeatureVector(deleted)=[];
+            end
+            for k=1:length(normalizedfeatureVector)
+                value = normalizedfeatureVector(k);
                 normalizedfeatureVector(k) = (value - normalizeValues(k,1))/(normalizeValues(k,2) - normalizeValues(k,1));
             end
             [test_prediction,score] = predict(trainedModel,normalizedfeatureVector);
