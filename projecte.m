@@ -14,7 +14,7 @@ imshow(I,[]);
 % [xmin ymin width height]
 rectangleContenidor = getrect();
 
-[trainedModel,trainingModel,normalizeValues,objectImage] = doFirstStep(I,rectangleContenidor,numberBlocksY,numberBlocksX,trainingModel,secondAproximationType);
+[trainedModel,trainingModel,normalizeValues,objectImage,bset,oset,bsetaux] = doFirstStep(I,rectangleContenidor,numberBlocksY,numberBlocksX,trainingModel,secondAproximationType);
 
 imwrite(objectImage,'temporary/1.pgm');
 aux = imread(['images/' fileNameSecondImage fileType]);
@@ -37,4 +37,29 @@ for i=1:17
     h2.BinWidth = h1.BinWidth;
     %h1.BinWidth = h2.BinWidth;
 end
+
+tset= [bset;oset];
+
+%Correlation
+rowNames = {'Red','Green','Blue','HueCos','HueSin','Saturation','Value','Average','AverageContrast','Smoothness','Skewness','Uniformity','Entropy','Contrast','Correlation','Energy','Homogeneity' };
+sTable = array2table(tset','RowNames',rowNames);
+corrplot(sTable)
+meh = corrcoef(tset);
+
+h = heatmap(meh);
+h.Title = 'Correlation between features';
+h.XLabel = 'Features';
+h.YLabel = 'Features';
+h.XData = ["Red" "Green" "Blue" "HueCos" "HueSin" "Saturation" "Value" "Average" "AverageContrast" "Smoothness" "Skewness" "Uniformity" "Entropy" "Contrast" "Correlation" "Energy" "Homogeneity"];
+h.YData = ["Red" "Green" "Blue" "HueCos" "HueSin" "Saturation" "Value" "Average" "AverageContrast" "Smoothness" "Skewness" "Uniformity" "Entropy" "Contrast" "Correlation" "Energy" "Homogeneity"];
+
+
+imagesc(meh);
+xticklabels = rowNames;
+xticks = linspace(1, size(tset, 2), numel(xticklabels));
+set(gca, 'XTick', xticks, 'XTickLabel', xticklabels)
+yticklabels = rowNames;
+yticks = linspace(1, size(tset, 1), numel(yticklabels));
+set(gca, 'YTick', yticks, 'YTickLabel', flipud(yticklabels(:)))
+
 
