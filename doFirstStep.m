@@ -1,4 +1,4 @@
-function [trainedModel,trainingModel,normalizeValues,objectImage] = doFirstStep(I,rectangleContenidor,numberBlocksY,numberBlocksX,trainingModel)
+function [trainedModel,trainingModel,normalizeValues,objectImage] = doFirstStep(I,rectangleContenidor,numberBlocksY,numberBlocksX,trainingModel,secondAproximationType)
     [nr,nc]= size(I(:,:,1));
     windowSizeY = floor(nr/numberBlocksY);
     windowSizeX = floor(nc/numberBlocksX);
@@ -50,7 +50,7 @@ function [trainedModel,trainingModel,normalizeValues,objectImage] = doFirstStep(
 
     [expandedEdges,interior] = expandEdges(firstCleaning,windowSizeY,windowSizeX);
 
-    predictedPoints = predictPoints(I,expandedEdges,trainedModel,trainingModel,normalizeValues);
+    predictedPoints = predictPoints(I,expandedEdges,trainedModel,trainingModel,normalizeValues,secondAproximationType);
 
     aux = or(predictedPoints,interior);
     aux = deleteInteriorHoles(aux);

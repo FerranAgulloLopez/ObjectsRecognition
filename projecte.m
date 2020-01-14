@@ -2,10 +2,11 @@ clear;
 %IMPORTANT VARIABLES
 numberBlocksY = 100;
 numberBlocksX = 100;
-fileType = '.jpg';
-fileNameFirstImage = 'cat-in-the-grass-124276';
-fileNameSecondImage = 'cat-jumping-running-grass';
+fileType = '.png';
+fileNameFirstImage = 'Eagle1';
+fileNameSecondImage = 'Eagle2';
 trainingModel = 'Bay'; % Tree | Bay | Knn | Svm
+secondAproximationType = 'Hard'; % Simple | Hard
 secondStepType = 'Features'; % KeyPoints | Features | FeaturesAndKeyPoints
 
 I = imread(['images/' fileNameFirstImage fileType]);
@@ -13,7 +14,7 @@ imshow(I,[]);
 % [xmin ymin width height]
 rectangleContenidor = getrect();
 
-[trainedModel,trainingModel,normalizeValues,objectImage] = doFirstStep(I,rectangleContenidor,numberBlocksY,numberBlocksX,trainingModel);
+[trainedModel,trainingModel,normalizeValues,objectImage] = doFirstStep(I,rectangleContenidor,numberBlocksY,numberBlocksX,trainingModel,secondAproximationType);
 
 imwrite(objectImage,'temporary/1.pgm');
 aux = imread(['images/' fileNameSecondImage fileType]);
