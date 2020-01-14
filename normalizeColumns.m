@@ -9,16 +9,16 @@ toDelete = zeros([1 1]);
         normalizeValues(i,1)=min_value;
         normalizeValues(i,2)=max_value;
         
-        for j=1:nr
-            value = result_table(j,i);
-            if max_value ~= min_value
-                result_table(j,i) = (value - min_value)/(max_value - min_value);
+        if max_value ~= min_value
+            for j=1:nr
+                value = result_table(j,i);
+                    result_table(j,i) = (value - min_value)/(max_value - min_value);
             end
         end
     end
     
     for l=1:nc
-        if result_table(:,l)==0 
+        if ~any(result_table(:,l))
             toDelete = [toDelete;l];
         end
     end
