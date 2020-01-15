@@ -1,4 +1,4 @@
-function I = doSecondStep(I,image1,image2,type,trainedModel,trainingModel,normalizeValues,numberBlocksY,numberBlocksX)
+function I = doSecondStep(I,image1,image2,type,trainedModel,trainingModel,normalizeValues,numberBlocksY,numberBlocksX,deleted)
     switch type
         case 'Features'
             [nr,nc]= size(I(:,:,1));
@@ -8,7 +8,7 @@ function I = doSecondStep(I,image1,image2,type,trainedModel,trainingModel,normal
             stuffX = windowSizeX - mod(nc,windowSizeX);
             I = padarray(I, [stuffY stuffX], 'replicate','post');
             [nr,nc]= size(I(:,:,1));
-            [oset,bsetaux,predictedBlocks] = predictModel(I,trainedModel,[1 1 (nc-1) (nr-1)],windowSizeX,windowSizeY,trainingModel,normalizeValues);
+            [oset,bsetaux,predictedBlocks] = predictModel(I,trainedModel,[1 1 (nc-1) (nr-1)],windowSizeX,windowSizeY,trainingModel,normalizeValues,deleted);
             cleaning = predictedBlocks == 1;
             cleaning = deleteInteriorHoles(cleaning);
             figure;imshow(cleaning,[]);

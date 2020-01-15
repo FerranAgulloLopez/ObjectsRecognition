@@ -1,12 +1,12 @@
 clear;
 %IMPORTANT VARIABLES
-numberBlocksY = 100;
-numberBlocksX = 100;
+numberBlocksY = 50;
+numberBlocksX = 50;
 fileType = '.png';
 fileNameFirstImage = 'Eagle1';
 fileNameSecondImage = 'Eagle2';
 trainingModel = 'Bay'; % Tree | Bay | Knn | Svm
-secondAproximationType = 'Hard'; % Simple | Hard
+secondAproximationType = 'Simple'; % Simple | Hard
 secondStepType = 'Features'; % KeyPoints | Features | FeaturesAndKeyPoints
 
 I = imread(['images/' fileNameFirstImage fileType]);
@@ -14,13 +14,16 @@ imshow(I,[]);
 % [xmin ymin width height]
 rectangleContenidor = getrect();
 
-[trainedModel,trainingModel,normalizeValues,objectImage,bset,oset,bsetaux] = doFirstStep(I,rectangleContenidor,numberBlocksY,numberBlocksX,trainingModel,secondAproximationType);
+[trainedModel,trainingModel,normalizeValues,objectImage,bset,oset,bsetaux,deleted] = doFirstStep(I,rectangleContenidor,numberBlocksY,numberBlocksX,trainingModel,secondAproximationType);
 
 imwrite(objectImage,'temporary/1.pgm');
 aux = imread(['images/' fileNameSecondImage fileType]);
 imwrite(aux,'temporary/2.pgm');
 
-doSecondStep(imread(['images/' fileNameSecondImage fileType]),imread('temporary/1.pgm'),imread('temporary/2.pgm'),secondStepType,trainedModel,trainingModel,normalizeValues,numberBlocksY,numberBlocksX);
+doSecondStep(imread(['images/' fileNameSecondImage fileType]),'meh','meh',secondStepType,trainedModel,trainingModel,normalizeValues,numberBlocksY,numberBlocksX,deleted);
+
+
+doSecondStep(imread(['images/' fileNameSecondImage fileType]),imread('temporary/1.pgm'),imread('temporary/2.pgm'),secondStepType,trainedModel,trainingModel,normalizeValues,numberBlocksY,numberBlocksX,deleted);
 
 
 %HISTOGRAMAS
